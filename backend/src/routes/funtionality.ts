@@ -4,8 +4,6 @@ import { deleteNoteController, getAllNotesController, getSharedMindNoteControlle
 
 const router = Router();
 
-
-
 router.get('/mindnotes', isAuthenticated , getAllNotesController)
 
 router.post('/mindnote/new',isAuthenticated,postNewNoteController)
