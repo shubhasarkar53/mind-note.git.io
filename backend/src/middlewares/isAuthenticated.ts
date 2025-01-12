@@ -4,6 +4,11 @@ import jwt from "jsonwebtoken";
 import User from "../models/User";
 import { catchAsyncErrors } from "./catchAsyncErrors";
 
+
+interface JwtPayloadWithUserId {
+  userId: string;
+}
+
 export const isAuthenticated = catchAsyncErrors(
   async (req: Request, res: Response, next: NextFunction) => {
     const { SessionID } = req.cookies;
@@ -12,15 +17,12 @@ export const isAuthenticated = catchAsyncErrors(
       return next(new ErrorHandler("Invalid Token", 400));
     }
 
-    const decoded = jwt.verify(SessionID, process.env.JWT_SECRET as string);
+    const decoded = jwt.verify(SessionID, process.env.JWT_SECRET as string) as JwtPayloadWithUserId;
     if (!decoded) {
       return next(new ErrorHandler("Invalid token payload", 400));
     }
-
-    // @ts-ignore
-    const user = User.findById(decoded.userId);
-    // @ts-ignore
-    req.user = user;
+    
+    req.userId =  decoded.userId;
 
     next();
   }

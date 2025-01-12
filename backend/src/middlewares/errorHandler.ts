@@ -10,4 +10,11 @@ export function globalErrorHandler(
   const statusCode = (err as ErrorHandler).statusCode;
   console.error(err.stack);
   res.status(statusCode).json({ success: false, message: message });
+
+
+  // if (err.name === "CastError") {
+  //   const message = `Resource not found. Invalid Path :${err.path}  ${err}`;
+  //   err = new ErrorHandler( message, 400);
+  // }
 }
+

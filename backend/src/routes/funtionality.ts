@@ -1,32 +1,21 @@
 import { Router } from "express";
 import { isAuthenticated } from "../middlewares/isAuthenticated";
+import { deleteNoteController, getAllNotesController, getSharedMindNoteController, patchNoteController, postNewNoteController, shareMindNoteController } from "../controllers/funtionality/mindNoteController";
 
 const router = Router();
 
 
 
-router.get('/mindnotes', isAuthenticated , (req, res) => {
+router.get('/mindnotes', isAuthenticated , getAllNotesController)
 
-});
+router.post('/mindnote/new',isAuthenticated,postNewNoteController)
 
-router.post('/mindnote/new', (req, res) => {
-    res.send('get');
-});
+router.patch('/mindnote/:id', isAuthenticated, patchNoteController)
 
-router.patch('/mindnote/:id', (req, res) => {
-    res.send('get');
-});
+router.delete('/mindnote/:id', isAuthenticated, deleteNoteController)
 
-router.delete('/mindnote/:id', (req, res) => {
-    res.send('get');
-});
+router.get('/mindnote/share/:id', isAuthenticated,shareMindNoteController)
 
-router.post('/mindnote/share/:id', (req, res) => {
-    res.send('get');
-});
-
-router.get('/mindnote/:hash', (req, res) => {
-    res.send('get');
-});
+router.get('/mindnote/share/public/:hash', getSharedMindNoteController)
 
 export default router;
