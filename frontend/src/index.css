@@ -1,0 +1,28 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* 60% Primary Color - Soft Blue */
+  --color-primary: 226 239 250;
+  /* 30% Secondary Color - Cool Gray */
+  --color-secondary: 243 244 246;
+  /* 10% Accent Color - Deep Blue */
+  --color-accent: 37 99 235;
+}
+
+body {
+  @apply bg-primary text-gray-800;
+}
+
+.btn-primary {
+  @apply bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors;
+}
+
+.card {
+  @apply bg-white rounded-lg shadow-md p-4 hover:shadow-lg transition-shadow;
+}
+
+.input-field {
+  @apply w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none;
+}

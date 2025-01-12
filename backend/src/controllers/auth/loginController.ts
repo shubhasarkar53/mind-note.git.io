@@ -1,15 +1,13 @@
+import bcrypt from "bcrypt";
 import { catchAsyncErrors } from "../../middlewares/catchAsyncErrors";
 import User from "../../models/User";
 import ErrorHandler from "../../utills/Error";
 import { setCookie } from "../../utills/setCookie";
-import { signUpInputSchema } from "../../validators/authValidator";
-import bcrypt from "bcrypt";
 
 export const loginController = catchAsyncErrors(async (req, res, next) => {
   //take input
   const { username, password } = req.body;
-  //validate ZOD
-  const validateUserInfo = signUpInputSchema.parse({ username, password });
+  
   //if already exist
   const existingUser = await User.findOne({ username });
 
@@ -19,7 +17,7 @@ export const loginController = catchAsyncErrors(async (req, res, next) => {
 
   //   compare password
   const isPassMatch = await bcrypt.compare(
-    validateUserInfo.password,
+    password,
     existingUser.password
   );
 

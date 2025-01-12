@@ -1,31 +1,33 @@
 import { catchAsyncErrors } from "../../middlewares/catchAsyncErrors";
 import User from "../../models/User";
 import ErrorHandler from "../../utills/Error";
-import { signUpInputSchema } from "../../validators/authValidator";
 
 export const signUpController = catchAsyncErrors(async (req, res, next) => {
-    //take input
-    const { username, password } = req.body;
-    //validate ZOD
-    const validateUserInfo = signUpInputSchema.parse({ username, password });
-    //if already exist
-    const existingUser = await User.findOne({username});
+  console.log("here")
+  //take input
+  console.log(req.body);
+  const { username, password, fullname } = req.body;
 
-    if (existingUser) {
-      return next(new ErrorHandler("User already exist", 400));
-    }
-    //make an enty
-    const newUser = new User({
-      username:validateUserInfo.username,
-      password:validateUserInfo.password
-    });
+  //if already exist
+  const existingUser = await User.findOne({ username });
 
-    await newUser.save();
-    //send res
+  if (existingUser) {
+    return next(new ErrorHandler("User already exist", 400));
+  }
+  //make an enty
+  console.log("make a enrty")
+  const newUser = new User({
+    fullname: fullname,
+    username: username,
+    password: password,
+  });
 
-    res.status(201).json({
-      success: true,
-      message: "User Signed Up Successfully",
-      user: newUser,
-    });
-  })
+  await newUser.save();
+  //send res
+console.log("new user sregisterd")
+  res.status(201).json({
+    success: true,
+    message: "User Signed Up Successfully",
+    user: newUser,
+  });
+});

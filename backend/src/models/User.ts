@@ -3,6 +3,7 @@ import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 
 interface IUser extends Document {
+  fullname: string;
   username: string;
   password: string;
   isPremium?: boolean;
@@ -10,6 +11,11 @@ interface IUser extends Document {
 }
 
 const UserSchema = new mongoose.Schema<IUser>({
+  fullname: {
+    type: String,
+    required: [true, "Name is required"],
+    minlength: [3, "Name must be at least 3 characters long"],
+  },
   username: {
     type: String,
     required: [true, "Username is required"],
