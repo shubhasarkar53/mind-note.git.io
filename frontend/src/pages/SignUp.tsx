@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Brain } from "lucide-react";
 import axios from "axios";
 import { baseUrl } from "../baseUrl";
@@ -7,6 +7,10 @@ export default function SignUp() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
+ const [error, setError] = useState<string | null>(null);
+ const [loading, setLoading] = useState(false);
+
+  const navigatTo = useNavigate();
 
   async function handleSignup({
     name,
@@ -27,9 +31,18 @@ export default function SignUp() {
         { fullname:name, password, username },
         config
       );
-      console.log(data);
-    } catch (error) {
-      console.log(error);
+      if (data) {
+        navigatTo("/dashboard");
+      }
+    } catch (err: any) {
+      //for now but fix it later
+      if (err.response && err.response.data && err.response.data.message) {
+        setError(err.response.data.message);
+      } else {
+        setError("Something went wrong. Please try again later.");
+      }
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -106,9 +119,40 @@ export default function SignUp() {
             </div>
           </div>
 
-          <button type="submit" className="btn-primary w-full">
-            Create account
+          <button
+            type="submit"
+            className="btn-primary w-full flex justify-center items-center"
+            disabled={loading} // Disable button during loading
+          >
+            {loading ? (
+              <svg
+                className="animate-spin h-5 w-5 text-white"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <circle
+                  className="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  strokeWidth="4"
+                ></circle>
+                <path
+                  className="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8v8H4z"
+                ></path>
+              </svg>
+            ) : (
+              "Create an account"
+            )}
           </button>
+
+          {error && (
+            <div className="text-sm text-red-500 text-center mb-4">{error}</div>
+          )}
         </form>
       </div>
     </div>
