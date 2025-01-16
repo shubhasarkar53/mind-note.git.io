@@ -2,6 +2,7 @@ import dotenv from "dotenv";
 import express from "express";
 import authRoutes from "./routes/auth";
 import funTionalityRoutes from "./routes/funtionality";
+import userRoutes from "./routes/user";
 import { connectDb } from "./db/db";
 import { globalErrorHandler } from "./middlewares/errorHandler";
 import cookieParser from "cookie-parser";
@@ -27,6 +28,7 @@ app.use(
 
 //routes
 app.use("/api/v1", funTionalityRoutes);
+app.use("/api/v1/user", userRoutes);
 app.use("/api/v1/auth", authRoutes);
 
 //connect to database

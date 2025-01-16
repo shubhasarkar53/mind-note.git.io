@@ -5,7 +5,7 @@ import logoutController from "../controllers/auth/logoutController";
 
 const router = Router();
 
-router.post("/login", loginController);
+router.post("/signin", loginController);
 
 router.post("/signup", signUpController);
 

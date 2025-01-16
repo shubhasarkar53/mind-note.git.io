@@ -1,7 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import ErrorHandler from "../utills/Error";
 import jwt from "jsonwebtoken";
-import User from "../models/User";
 import { catchAsyncErrors } from "./catchAsyncErrors";
 
 
@@ -14,7 +13,7 @@ export const isAuthenticated = catchAsyncErrors(
     const { SessionID } = req.cookies;
 
     if (!SessionID) {
-      return next(new ErrorHandler("Invalid Token", 400));
+      return next(new ErrorHandler("You are logged out, login first", 400));
     }
 
     const decoded = jwt.verify(SessionID, process.env.JWT_SECRET as string) as JwtPayloadWithUserId;
