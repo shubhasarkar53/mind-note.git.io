@@ -1,15 +1,24 @@
-import { useState } from 'react';
-import { Plus, Twitter, Youtube, Linkedin, Link as LinkIcon, Brain } from 'lucide-react';
-import { Modal, Box, Avatar } from '@mui/material';
-import Sidebar from '../components/Sidebar';
-import Navbar from '../components/Navbar';
-import Footer from '../components/Footer';
-import NoteCard from '../components/NoteCard';
+import { useState } from "react";
+import {
+  Plus,
+  Twitter,
+  Youtube,
+  Linkedin,
+  Link as LinkIcon,
+  Brain,
+} from "lucide-react";
+import { Modal, Box, Avatar } from "@mui/material";
+import Sidebar from "../components/Sidebar";
+import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
+import NoteCard from "../components/NoteCard";
+import { useRecoilValue } from "recoil";
+import { authAtom } from "../store/atoms/atoms";
 
 interface Note {
   id: string;
   title: string;
-  type: 'twitter' | 'youtube' | 'linkedin' | 'link';
+  type: "twitter" | "youtube" | "linkedin" | "link";
   link: string;
   content: string;
 }
@@ -34,13 +43,17 @@ export default function Dashboard() {
     setSelectedNote(null);
   };
 
+  ////
+
+  const isAuthenticated = useRecoilValue(authAtom);
+
   return (
     <div className="min-h-screen bg-primary flex">
       <Sidebar />
-      
+
       <div className="flex-1 flex flex-col">
-        <Navbar onAddNote={handleAddNote} />
-        
+        <Navbar isAuthenticated={isAuthenticated} onAddNote={handleAddNote} />
+
         <main className="flex-1 p-6 overflow-auto">
           {notes.length === 0 ? (
             <div className="h-full flex items-center justify-center">
@@ -51,7 +64,7 @@ export default function Dashboard() {
                 <Plus className="w-5 h-5" />
                 <span>Add Mind Note</span>
               </button>
-            
+
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -65,7 +78,7 @@ export default function Dashboard() {
             </div>
           )}
         </main>
-        
+
         <Footer />
       </div>
 
@@ -76,7 +89,7 @@ export default function Dashboard() {
       >
         <Box className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-lg bg-white rounded-xl shadow-lg p-6">
           <h2 className="text-2xl font-bold mb-4">
-            {selectedNote ? 'Edit Note' : 'Add New Note'}
+            {selectedNote ? "Edit Note" : "Add New Note"}
           </h2>
           {/* Modal content will go here */}
         </Box>

@@ -1,55 +1,28 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Brain } from "lucide-react";
-import axios from "axios";
-import { baseUrl } from "../baseUrl";
+
+import { useAuth } from "../store/hooks/authHooks";
+import { ICredentials } from "../store/actions/authActions";
+import { useRecoilValue } from "recoil";
+import { errorAtom, loadingAtom } from "../store/atoms/atoms";
 export default function SignUp() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
- const [error, setError] = useState<string | null>(null);
- const [loading, setLoading] = useState(false);
+  const error = useRecoilValue(errorAtom);
+  const loading = useRecoilValue(loadingAtom);
 
-  const navigatTo = useNavigate();
+  const { handleSignup } = useAuth();
+  const naviagetTo = useNavigate();
 
-  async function handleSignup({
-    name,
-    password,
-    username,
-  }: {
-    name: string;
-    password: string;
-    username: string;
-  }) {
-    try {
-      const config = {
-        headers: { "Content-type": "application/json" },
-        withCredentials: true,
-      };
-      const { data } = await axios.post(
-        `${baseUrl}/api/v1/auth/signup`,
-        { fullname:name, password, username },
-        config
-      );
-      if (data) {
-        navigatTo("/dashboard");
-      }
-    } catch (err: any) {
-      //for now but fix it later
-      if (err.response && err.response.data && err.response.data.message) {
-        setError(err.response.data.message);
-      } else {
-        setError("Something went wrong. Please try again later.");
-      }
-    } finally {
-      setLoading(false);
-    }
-  }
-
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle sign up logic
-    handleSignup({ name, password, username });
+    const cred: ICredentials = { fullname: name, password, username };
+    const isSuccess = await handleSignup(cred);
+    if(isSuccess){
+      naviagetTo("/signin")
+    }
   };
 
   return (
@@ -90,7 +63,7 @@ export default function SignUp() {
                 htmlFor="username"
                 className="text-sm font-medium text-gray-700"
               >
-                Username 
+                Username
               </label>
               <input
                 id="username"
