@@ -5,6 +5,10 @@ export const loadingAtom = atom<boolean>({
     key:"loadingAtom",
     default:false
 })
+export const modalAtom = atom<boolean>({
+    key:"modalAtom",
+    default:false
+})
 
 
 export const errorAtom = atom<string|null>({

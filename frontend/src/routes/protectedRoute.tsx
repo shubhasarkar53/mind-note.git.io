@@ -12,10 +12,10 @@ export const ProtectedRoute:React.FC<Props> = ({ children } ) =>{
     const isLoading = useRecoilValue(loadingAtom);
     const navigateTo = useNavigate();
 
-    if (isLoading) {
-      // Show a loader while checking authentication status
-      return <div>Loading...</div>;
-    }
+    // if (isLoading) {
+    //   // Show a loader while checking authentication status
+    //   return <div>Loading...</div>;
+    // }
   
    
     if (!isAuthenticated) {

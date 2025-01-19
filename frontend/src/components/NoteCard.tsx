@@ -1,15 +1,10 @@
 import { Twitter, Youtube, Linkedin, Link as LinkIcon } from 'lucide-react';
+import { INotes } from '../store/types/types';
+import { Icon } from '@mui/material';
 
-interface Note {
-  id: string;
-  title: string;
-  type: 'twitter' | 'youtube' | 'linkedin' | 'link';
-  link: string;
-  content: string;
-}
 
 interface NoteCardProps {
-  note: Note;
+  note: INotes;
   onEdit: () => void;
 }
 
@@ -21,7 +16,8 @@ const icons = {
 };
 
 export default function NoteCard({ note, onEdit }: NoteCardProps) {
-  const Icon = icons[note.type];
+  // const Icon = icons[note.type];
+  
 
   return (
     <div className="card cursor-pointer" onClick={onEdit}>
@@ -43,7 +39,7 @@ export default function NoteCard({ note, onEdit }: NoteCardProps) {
       </div>
       
       <div className="prose prose-sm">
-        <p className="text-gray-600 line-clamp-3">{note.content}</p>
+        <p className="text-gray-600 line-clamp-3">{note.text}</p>
       </div>
     </div>
   );

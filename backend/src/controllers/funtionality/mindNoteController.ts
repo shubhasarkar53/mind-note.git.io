@@ -15,7 +15,7 @@ export const getAllNotesController = catchAsyncErrors(
     res.status(200).json({
       success: true,
       message: "All Notes",
-      data: allNotes,
+      notes: allNotes,
     });
   }
 );
@@ -37,6 +37,7 @@ export const postNewNoteController = catchAsyncErrors(
     res.status(200).json({
       success: true,
       message: "Note Added",
+      note:newNote
     });
   }
 );

@@ -1,12 +1,13 @@
 export interface INotes {
-  link: string;
-  type: string;
-  title: string;
+  _id?: string;
+  link?: string;
+  type?: string;
+  title?: string;
   text?: string;
   shared?: boolean;
   tags?: Array<string>;
-  userId: string;
-  timestamps: boolean;
+  userId?: string;
+  timestamps?: boolean;
 }
 
 export interface ILinks {
