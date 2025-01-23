@@ -100,13 +100,39 @@ export const useNoteFunctions = () => {
 
   //get all notes
 
+  // const handleGetNotes = async () => {
+  //   setLoading(true);
+  //   setError(null);
+  //   try {
+  //     const { data } = await getNotes();
+  //     console.log("Notes data:", data);
+  //     if (data) {
+  //       setNotes(data.notes);
+  //       return true;
+  //     }
+  //   } catch (error) {
+  //     if (axios.isAxiosError(error)) {
+  //       setError(error?.response?.data?.message);
+  //       // console.log(error);
+  //       throw error;
+  //     } else {
+  //       console.error("Failed to load user");
+  //     }
+  //     return false;
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+
+
+  //latest
   const handleGetNotes = async () => {
     setLoading(true);
     setError(null);
     try {
       const { data } = await getNotes();
       console.log("Notes data:", data);
-      if (data) {
+      if (data.notes) {
         setNotes(data.notes);
         return true;
       }

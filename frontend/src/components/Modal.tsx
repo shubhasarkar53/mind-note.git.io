@@ -1,8 +1,9 @@
-import { Box, Input, InputLabel, Modal } from "@mui/material";
-import { useRecoilState } from "recoil";
-import { modalAtom} from "../store/atoms/atoms";
+import { Box, Button, Input, InputLabel, Modal } from "@mui/material";
 import { FormEvent, useState } from "react";
+import { useRecoilState } from "recoil";
+import { modalAtom } from "../store/atoms/atoms";
 import { useNoteFunctions } from "../store/hooks/noteHooks";
+import { iconOptions } from "./NoteCard";
 function DisplayModal() {
   const [isModalOpen, setIsModalOpen] = useRecoilState(modalAtom);
   const handleCloseModal = () => {
@@ -12,20 +13,29 @@ function DisplayModal() {
 
   const [title, setTitle] = useState<string>("");
   const [url, setUrl] = useState<string>("");
-  const [type, setType] = useState<string>("random");
+  const [type, setType] = useState<string>("link");
   const [text, setText] = useState<string>("");
-
-  const {handleCreateNote} = useNoteFunctions()
+  const [selectedType, setSelectedType] = useState<string>("");
+  const { handleCreateNote } = useNoteFunctions();
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
-    console.log("data:", { title, url, type, text });
+    const isSuccess = await handleCreateNote({ title, link: url, type, text });
 
-    const isSuccess = await handleCreateNote({ title, link:url, type, text })
-    
-    if(isSuccess){
-        handleCloseModal();
+    if (isSuccess) {
+      handleCloseModal();
     }
+    setTitle("");
+    setUrl("");
+    setType("");
+    setText("");
+  }
+
+  //
+
+  function handleOnTypeChange(option: string) {
+    setSelectedType(option);
+    setType(option);
   }
 
   return (
@@ -85,17 +95,22 @@ function DisplayModal() {
                     }
                   />
                 </div>
-                <div className="grid grid-cols-3 items-center gap-4">
-                  <InputLabel htmlFor="type">Type</InputLabel>
-                  <Input
-                    id="type"
-                    placeholder="Youtube"
-                    className="col-span-2 h-8"
-                    value={type}
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                      setType(e.target.value)
-                    }
-                  />
+                <div className="grid grid-cols-4 items-center gap-4 mt-4">
+                  {(
+                    Object.keys(iconOptions) as Array<keyof typeof iconOptions>
+                  ).map((option, index) => {
+                    return (
+                      <Button
+                        key={index}
+                        className={`btn-secondary-sm  ${
+                          selectedType === option ? "ring-2 ring-primary" : ""
+                        }`}
+                        onClick={() => handleOnTypeChange(option)}
+                      >
+                        <span className="capitalize">{option}</span>
+                      </Button>
+                    );
+                  })}
                 </div>
               </div>
             </div>
