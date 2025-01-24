@@ -21,7 +21,7 @@ app.use(
   cors({
     origin: process.env.FRONTED_URL as string || "http://localhost:5173",
     credentials: true,
-    methods: "GET,POST,PUT,DELETE", // Specify allowed HTTP methods
+    methods: "GET,POST,PUT,DELETE,PATCH", // Specify allowed HTTP methods
     allowedHeaders: "Content-Type,Authorization",
   })
 );

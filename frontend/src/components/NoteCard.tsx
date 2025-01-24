@@ -1,8 +1,20 @@
-import { Twitter, Youtube, Linkedin, Link as LinkIcon, X } from "lucide-react";
-import { INotes } from "../store/types/types";
-import { dividerClasses, Icon } from "@mui/material";
-import React from "react";
+import {
+  Delete,
+  DeleteIcon,
+  Drum,
+  Facebook,
+  Instagram,
+  Linkedin,
+  Link as LinkIcon,
+  LucideDelete,
+  Trash,
+  Twitter,
+  Youtube,
+} from "lucide-react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import { useNoteFunctions } from "../store/hooks/noteHooks";
+import { INotes } from "../store/types/types";
 
 interface NoteCardProps {
   note: INotes;
@@ -14,6 +26,8 @@ export enum iconOptions {
   youtube = "Youtube",
   linkedin = "Linkedin",
   link = "LinkIcon",
+  instagram = "Instagram",
+  facebook = "Facebook",
 }
 
 export const icon = {
@@ -21,119 +35,128 @@ export const icon = {
   youtube: Youtube,
   linkedin: Linkedin,
   link: LinkIcon,
+  instagram: Instagram,
+  facebook: Facebook,
 };
 
-function generateEmbedLink(link: string): string | null {
-  try {
-    // Check if the link contains "youtu.be" or "youtube.com"
-    const url = new URL(link);
-
-    if (url.hostname === "youtu.be") {
-      // For short URLs like "https://youtu.be/aE4G6UttnRg"
-      return `https://www.youtube.com/embed/${url.pathname.slice(1)}`;
-    } else if (
-      url.hostname === "www.youtube.com" ||
-      url.hostname === "youtube.com"
-    ) {
-      // For full URLs like "https://www.youtube.com/watch?v=aE4G6UttnRg"
-      const videoId = url.searchParams.get("v");
-      if (videoId) {
-        return `https://www.youtube.com/embed/${videoId}`;
-      }
-    }
-    return null; // Return null if the link format is unsupported
-  } catch (error) {
-    console.error("Invalid URL:", error);
-    return null;
-  }
-}
-
-function generateTwitterEmbedLink(tweetUrl: string): string | null {
-  try {
-    // Parse the input URL
-    const url = new URL(tweetUrl);
-
-    // Check if the hostname is x.com and replace it with twitter.com
-    if (url.hostname === "x.com") {
-      url.hostname = "twitter.com";
-    }
-
-    // Check if it's a valid Twitter URL
-    if (url.hostname === "twitter.com") {
-      // Generate the embed link
-      return `https://publish.twitter.com/oembed?url=${url.toString()}`;
-    }
-
-    return null; // Return null if it's not a valid Twitter or X link
-  } catch (error) {
-    console.error("Invalid URL:", error);
-    return null;
-  }
-}
-
 function NoteCard({ note, onEdit }: NoteCardProps) {
+  const { handleUpdateNote,handleDeleteNote } = useNoteFunctions();
+  const [isEditingTitle, setIsEditingTitle] = useState(false);
+  const [isEditingText, setIsEditingText] = useState(false);
+  const [title, setTitle] = useState(note.title);
+  const [text, setText] = useState(note.text);
+
   const exp = (note.type as string) || "link";
   //@ts-ignore
   const Icon = icon[exp];
+
+  // Handle title change in input
+  const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setTitle(e.target.value);
+  };
+
+  const handleTextChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setText(e.target.value);
+  };
+
+  const handleSave = () => {
+    handleUpdateNote({ title }, note._id as string);
+    setIsEditingTitle(false);
+  };
+  const handleDelete = () => {
+    handleDeleteNote(note._id as string);
+  };
+
+  // Handle key press (Enter to save)
+  const handleKeyPress = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter") {
+      handleSave();
+    }
+  };
+  const handleSaveText = () => {
+    handleUpdateNote({ text }, note._id as string);
+    setIsEditingText(false);
+  };
+  // Handle key press for text
+  const handleTextKeyPress = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter" && e.shiftKey === false) {
+      e.preventDefault(); // Prevent adding a new line
+      handleSaveText();
+    }
+  };
+
   return (
     <div className="card cursor-pointer" onClick={onEdit}>
-      <div className="flex items-center space-x-2 mb-3">
-        <Icon className="w-5 h-5 text-accent" />
-        <h3 className="text-lg font-semibold">{note.title}</h3>
+      <div className="flex items-center justify-between  ">
+        <div className="flex items-center space-x-2 mb-3 ">
+          <Icon className="w-5 h-5 text-accent" />
+
+          {isEditingTitle ? (
+            <input
+              type="text"
+              value={title}
+              onChange={handleTitleChange}
+              onKeyDown={handleKeyPress}
+              onBlur={handleSave} // Save when user clicks away
+              autoFocus
+              className="text-lg font-semibold  rounded px-2"
+            />
+          ) : (
+            <h3
+              className="text-lg font-semibold cursor-pointer"
+              onClick={(e) => {
+                e.stopPropagation();
+                setIsEditingTitle(true);
+              }}
+            >
+              {title}
+            </h3>
+          )}
+        </div>
+        <div className="flex items-center space-x-2 mb-3 hover:bg-red-50 hover:rounded-full" onClick={handleDelete}>
+          <Trash className="w-5 h-5 text-red-500" />
+        </div>
       </div>
 
       <div className="mb-4">
-        <Link
-          to={note.link as string}
-          className="text-blue-600 hover:underline break-all"
-          target="_blank"
-          rel="noopener noreferrer"
-          onClick={(e) => e.stopPropagation()}
-        >
-          {note.link}
-        </Link>
-
-        <div className=" mx-auto my-4">
-          {note.type == iconOptions.youtube.toLowerCase() && (
-            <iframe
-              className="w-full rounded-lg "
-              src={`${generateEmbedLink(note.link as string) || null}`}
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-              referrerPolicy="strict-origin-when-cross-origin"
-              allowFullScreen
-            ></iframe>
-          )}
-          {note.type == iconOptions.twitter.toLowerCase() && (
-            <blockquote
-              className="twitter-tweet"
-              data-cards="hidden"
-              data-conversation="none"
-            >
-              <a
-                href={`${
-                  generateTwitterEmbedLink(note.link as string) || null
-                }`}
-              ></a>
-            </blockquote>
-          )}
-          {note.type == iconOptions.linkedin.toLowerCase() && (
-            <iframe
-              src="https://www.linkedin.com/embed/feed/update/urn:li:ugcPost:7287198308345724928"
-              height="500"
-              width="100%"
-              frameBorder="0"
-              allowFullScreen
-            ></iframe>
-          )}
+        <div className=" mx-auto my-4 w-full md:max-w-60 aspect-video border  bg-slate-50 rounded-lg overflow-hidden">
+          <Link
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={(e) => e.stopPropagation()}
+            to={note.link as string}
+            className="w-full h-full flex justify-center items-center "
+          >
+            <Icon size={50} className="text-blue-200" />
+          </Link>
         </div>
       </div>
 
       <div className="prose prose-sm">
-        <p className="text-gray-600 line-clamp-3">{note.text}</p>
+        {isEditingText ? (
+          <textarea
+            value={text}
+            onChange={handleTextChange}
+            onKeyDown={handleTextKeyPress}
+            onBlur={handleSaveText} // Save when user clicks away
+            autoFocus
+            rows={3}
+            className="w-full text-gray-600 border border-gray-300 rounded px-2 py-1"
+          />
+        ) : (
+          <p
+            className="text-gray-600 line-clamp-3 cursor-pointer"
+            onClick={(e) => {
+              e.stopPropagation();
+              setIsEditingText(true);
+            }}
+          >
+            {text}
+          </p>
+        )}
       </div>
     </div>
   );
 }
 
 export default React.memo(NoteCard);
-// export default NoteCard;

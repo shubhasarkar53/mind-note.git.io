@@ -29,6 +29,8 @@ function DisplayModal() {
     setUrl("");
     setType("");
     setText("");
+    setSelectedType("");
+
   }
 
   //

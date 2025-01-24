@@ -14,12 +14,12 @@ export const createNote = async (notesData: INotes) => {
   });
 };
 export const updateNote = async (notesData: updateNoteDataType, id: string) => {
-  return await axios.patch(`${baseUrl}/mindnote/:${id}`, notesData, {
+  return await axios.patch(`${baseUrl}/mindnote/${id}`, notesData, {
     withCredentials: true,
   });
 };
 export const deleteNote = async (id: string) => {
-  return await axios.delete(`${baseUrl}/mindnote/:${id}`, {
+  return await axios.delete(`${baseUrl}/mindnote/${id}`, {
     withCredentials: true,
   });
 };

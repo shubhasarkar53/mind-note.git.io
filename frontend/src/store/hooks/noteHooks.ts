@@ -51,9 +51,9 @@ export const useNoteFunctions = () => {
     try {
       const { data } = await updateNote(notesData, id);
       console.log("after updatenote data:", data);
-      if (data) {
+      if (data.note) {
         setNotes((prev) =>
-          prev.map((note) => (note._id == id ? notesData : note))
+          prev.map((note) => (note._id == id ? data.note : note))
         );
 
         return true;
