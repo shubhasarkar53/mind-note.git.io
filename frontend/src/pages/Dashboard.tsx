@@ -11,6 +11,7 @@ import { notesSelector } from "../store/selectors/notesSelector";
 import { INotes } from "../store/types/types";
 import { useEffect } from "react";
 import { useNoteFunctions } from "../store/hooks/noteHooks";
+import ShareModal from "../components/ShareModal";
 
 // export default function Dashboard() {
 //   const loadedNotes = useRecoilValueLoadable(notesSelector);
@@ -125,6 +126,8 @@ export default function Dashboard() {
         <Footer />
       </div>
       <DisplayModal />
+      <ShareModal />
+     
     </div>
   );
 }

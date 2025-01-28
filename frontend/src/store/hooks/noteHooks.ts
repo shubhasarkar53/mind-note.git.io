@@ -1,20 +1,33 @@
 import { useRecoilState } from "recoil";
-import { errorAtom, loadingAtom, notesAtom } from "../atoms/atoms";
+import {
+  errorAtom,
+  loadingAtom,
+  notesAtom,
+  sharableLinkAtom,
+  sharedNoteAtom,
+  shareErrorAtom,
+} from "../atoms/atoms";
 
 import axios from "axios";
 import { INotes } from "../types/types";
 import {
   createNote,
   deleteNote,
+  generateSharableLink,
   getNotes,
+  getSharedNote,
   updateNote,
   updateNoteDataType,
 } from "../actions/noteActions";
+import { baseUrl } from "../../baseUrl";
 
 export const useNoteFunctions = () => {
   const [loading, setLoading] = useRecoilState(loadingAtom);
   const [error, setError] = useRecoilState(errorAtom);
+  const [sError, setSError] = useRecoilState(shareErrorAtom);
   const [note, setNotes] = useRecoilState(notesAtom);
+  const [, setSharedNotes] = useRecoilState(sharedNoteAtom);
+  const [, setSharableLink] = useRecoilState(sharableLinkAtom);
 
   //create note
   const handleCreateNote = async (notesData: INotes) => {
@@ -24,7 +37,7 @@ export const useNoteFunctions = () => {
       const { data } = await createNote(notesData);
       console.log("after creating note data:", data);
       if (data) {
-        setNotes((prev) => [...prev, notesData]);
+        setNotes((prev) => [...prev, data.note]);
         return true;
       }
     } catch (error) {
@@ -100,31 +113,6 @@ export const useNoteFunctions = () => {
 
   //get all notes
 
-  // const handleGetNotes = async () => {
-  //   setLoading(true);
-  //   setError(null);
-  //   try {
-  //     const { data } = await getNotes();
-  //     console.log("Notes data:", data);
-  //     if (data) {
-  //       setNotes(data.notes);
-  //       return true;
-  //     }
-  //   } catch (error) {
-  //     if (axios.isAxiosError(error)) {
-  //       setError(error?.response?.data?.message);
-  //       // console.log(error);
-  //       throw error;
-  //     } else {
-  //       console.error("Failed to load user");
-  //     }
-  //     return false;
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
-
-
   //latest
   const handleGetNotes = async () => {
     setLoading(true);
@@ -150,11 +138,68 @@ export const useNoteFunctions = () => {
     }
   };
 
+  const handleGenerateSharableLink = async (id: string) => {
+    setLoading(true);
+    setError(null);
+
+    try {
+      const { data } = await generateSharableLink(id);
+
+      const link = `${window.location.origin}/mindnote/share/${data.data}`;
+
+      setNotes((prev) =>
+        prev.map((note) =>
+          note._id == id ? { ...note, shared: true} : note
+        )
+      );
+
+      setSharableLink(link);
+
+
+      return true;
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        setError(error?.response?.data?.message);
+        // console.log(error);
+        throw error;
+      } else {
+        console.error("Failed to load user");
+      }
+      return false;
+    } finally {
+      setLoading(false);
+    }
+  };
+  const handleGetSharedContent = async (hash: string) => {
+    setLoading(true);
+    setSError(null);
+
+    try {
+      const { data } = await getSharedNote(hash);
+
+      setSharedNotes(data.data);
+
+      return true;
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        setSError(error?.response?.data?.message);
+        // console.log(error);
+        throw error;
+      } else {
+        console.error("Failed to load user");
+      }
+      return false;
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return {
     handleCreateNote,
     handleUpdateNote,
     handleGetNotes,
     handleDeleteNote,
+    handleGetSharedContent,
+    handleGenerateSharableLink
   };
 };

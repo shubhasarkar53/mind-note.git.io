@@ -17,6 +17,7 @@ import { ProtectedRoute } from "./routes/protectedRoute";
 import { useAuth } from "./store/hooks/authHooks";
 import { useRecoilValue } from "recoil";
 import { authAtom } from "./store/atoms/atoms";
+import SharedNote from "./components/SharedNote";
 
 function App() {
   const { loadUser } = useAuth();
@@ -32,6 +33,7 @@ const isAuthenticated = useRecoilValue(authAtom)
         <Routes>
           <Route path="/signup" element={!isAuthenticated ? <SignUp /> : <Navigate to={"/dashboard"}/>} />
           <Route path="/signin" element={ !isAuthenticated ?  <SignIn /> :<Navigate to={"/dashboard"}/>} />
+          <Route path="/mindnote/share/:hash" element={ <SharedNote/>} />
           <Route
             path="/dashboard"
             element={

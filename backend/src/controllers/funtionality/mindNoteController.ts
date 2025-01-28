@@ -183,7 +183,10 @@ export const getSharedMindNoteController = catchAsyncErrors(
       return next(new ErrorHandler("Invalid sharable link or it is not public", 404));
     }
 
-    const linkContent = await Content.findById(isHashExists.noteId);
+    const linkContent = await Content.findById(isHashExists.noteId).populate({
+      path: "userId", 
+      select: "fullname",
+    });
 
     res.status(200).json({
       success: true,

@@ -27,4 +27,14 @@ export const getNotes = async () => {
   return await axios.get(`${baseUrl}/mindnotes`, { withCredentials: true });
 };
 
-//share pending
+//share 
+export const generateSharableLink = async (id: string) => {
+  return await axios.get(`${baseUrl}/mindnote/share/${id}`, {
+    withCredentials: true,
+  });
+};
+export const getSharedNote = async (hash: string) => {
+  return await axios.get(`${baseUrl}/mindnote/share/public/${hash}`, {
+    withCredentials: true,
+  });
+};

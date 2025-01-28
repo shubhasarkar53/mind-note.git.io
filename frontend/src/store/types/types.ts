@@ -6,8 +6,9 @@ export interface INotes {
   text?: string;
   shared?: boolean;
   tags?: Array<string>;
-  userId?: string;
-  timestamps?: boolean;
+  userId?: { fullname: string; _id: string };
+  updatedAt?: string;
+  createdAt?: string;
 }
 
 export interface ILinks {

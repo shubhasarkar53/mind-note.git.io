@@ -1,12 +1,12 @@
 import {
-  Delete,
-  DeleteIcon,
-  Drum,
   Facebook,
+  Globe,
+  Globe2,
   Instagram,
   Linkedin,
   Link as LinkIcon,
-  LucideDelete,
+  Share,
+  Share2,
   Trash,
   Twitter,
   Youtube,
@@ -15,6 +15,9 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { useNoteFunctions } from "../store/hooks/noteHooks";
 import { INotes } from "../store/types/types";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { sharableLinkAtom, shareModalAtom } from "../store/atoms/atoms";
+import ShareModal from "./ShareModal";
 
 interface NoteCardProps {
   note: INotes;
@@ -40,12 +43,16 @@ export const icon = {
 };
 
 function NoteCard({ note, onEdit }: NoteCardProps) {
-  const { handleUpdateNote,handleDeleteNote } = useNoteFunctions();
+  const sharableLink = useRecoilValue(sharableLinkAtom);
+
+  const { handleUpdateNote, handleDeleteNote, handleGenerateSharableLink } =
+    useNoteFunctions();
   const [isEditingTitle, setIsEditingTitle] = useState(false);
   const [isEditingText, setIsEditingText] = useState(false);
-  const [title, setTitle] = useState(note.title);
+  const [title, setTitle] = useState(note.title as string);
   const [text, setText] = useState(note.text);
-
+  const [copied, setCopied] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useRecoilState(shareModalAtom);
   const exp = (note.type as string) || "link";
   //@ts-ignore
   const Icon = icon[exp];
@@ -85,11 +92,23 @@ function NoteCard({ note, onEdit }: NoteCardProps) {
     }
   };
 
+  //handle share
+
+  async function handleShare() {
+    console.log("noteid from share:", note._id);
+    handleGenerateSharableLink(note._id as string);
+    //open share modal
+    setIsModalOpen(true);
+  }
+
   return (
-    <div className="card cursor-pointer" onClick={onEdit}>
+    <div className="card cursor-pointer relative" onClick={onEdit}>
       <div className="flex items-center justify-between  ">
+        {/* main top */}
         <div className="flex items-center space-x-2 mb-3 ">
-          <Icon className="w-5 h-5 text-accent" />
+          <div className="w-5 aspect-square">
+            <Icon className=" text-accent" />
+          </div>
 
           {isEditingTitle ? (
             <input
@@ -109,17 +128,37 @@ function NoteCard({ note, onEdit }: NoteCardProps) {
                 setIsEditingTitle(true);
               }}
             >
-              {title}
+              {title.length > 35 ? `${title.slice(0, 35)}...` : title}{" "}
             </h3>
           )}
         </div>
-        <div className="flex items-center space-x-2 mb-3 hover:bg-red-50 hover:rounded-full" onClick={handleDelete}>
-          <Trash className="w-5 h-5 text-red-500" />
-        </div>
+
+        {/* top-icons */}
+        {!isEditingTitle && (
+          <div className=" flex items-center gap-2">
+            <div
+              className="flex items-center space-x-2 mb-3 hover:bg-red-50 hover:rounded-full"
+              onClick={handleDelete}
+            >
+              <Trash className="w-4 aspect-square text-red-500" />
+            </div>
+            <div
+              className="flex items-center space-x-2 mb-3 hover:bg-blue-50 hover:rounded-full"
+              onClick={handleShare}
+            >
+              <Share2 className="w-4 aspect-square text-blue-600" />
+            </div>
+          </div>
+        )}
       </div>
 
       <div className="mb-4">
-        <div className=" mx-auto my-4 w-full md:max-w-60 aspect-video border  bg-slate-50 rounded-lg overflow-hidden">
+        <div className=" relative mx-auto my-4 w-full md:max-w-60 aspect-video border  bg-slate-50 rounded-lg overflow-hidden">
+          {note.shared && (
+            <div className="absolute top-1 right-2 select-none">
+              <Globe size={12} className="text-green-400" />
+            </div>
+          )}
           <Link
             target="_blank"
             rel="noopener noreferrer"
@@ -145,7 +184,7 @@ function NoteCard({ note, onEdit }: NoteCardProps) {
           />
         ) : (
           <p
-            className="text-gray-600 line-clamp-3 cursor-pointer"
+            className="text-gray-600 line-clamp-5 cursor-pointer"
             onClick={(e) => {
               e.stopPropagation();
               setIsEditingText(true);

@@ -9,10 +9,18 @@ export const modalAtom = atom<boolean>({
     key:"modalAtom",
     default:false
 })
+export const shareModalAtom = atom<boolean>({
+    key:"shareModalAtom",
+    default:false
+})
 
 
 export const errorAtom = atom<string|null>({
     key:"errorAtom",
+    default:null
+})
+export const shareErrorAtom = atom<string|null>({
+    key:"shareErrorAtom",
     default:null
 })
 
@@ -30,4 +38,13 @@ export const notesAtom = atom<INotes[]>({
 export const authAtom = atom<boolean>({
     key:"authAtom",
     default:false
+})
+
+export const sharedNoteAtom = atom<INotes>({
+    key:"sharedNoteAtom",
+    default:{}
+})
+export const sharableLinkAtom = atom<string|null>({
+    key:"sharableLinkAtom",
+    default:null
 })
