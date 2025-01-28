@@ -1,40 +1,70 @@
-import { Home, Settings, BookOpen } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import React from "react";
+import { Plus } from "lucide-react";
+import { motion } from "framer-motion";
+import { nanoid } from "nanoid";
+import { useSetRecoilState } from "recoil";
+import { notesState } from "../store/atoms/atoms";
+import { useNoteFunctions } from "../store/hooks/noteHooks";
 
-export default function Sidebar() {
+const colorOptions = [
+  "bg-rose-200",
+  "bg-yellow-200",
+  "bg-green-200",
+  "bg-blue-200",
+  "bg-purple-200",
+];
+
+export const Sidebar = () => {
+  const [selectedColor, setSelectedColor] = React.useState(colorOptions[0]);
+  const { handleCreateNote } = useNoteFunctions();
+
+  const handleAddNote = async () => {
+    const defaultContent = {
+      title: "Title..",
+      link: "Paste your link here...",
+      type: "link",
+      text: "Write you mind's note here..",
+      createdAt: new Date().toISOString(),
+    };
+
+    await handleCreateNote(defaultContent);
+    //   setNotes((prev) => [
+    //     ...prev,
+    //     {
+    //       id: nanoid(),
+    //       content: '',
+    //       color: selectedColor,
+    //       createdAt: new Date(),
+    //     },
+    //   ]);
+  };
+
   return (
-    <aside className="w-64 bg-white shadow-sm hidden md:block">
-      <div className="h-full flex flex-col py-6">
-        <div className="px-6 mb-6">
-          <h2 className="text-lg font-bold text-gray-900">Menu</h2>
-        </div>
-        
-        <nav className="flex-1">
-          <Link
-            to="/dashboard"
-            className="flex items-center space-x-2 px-6 py-3 text-gray-700 hover:bg-primary hover:text-accent"
-          >
-            <Home className="w-5 h-5" />
-            <span>Home</span>
-          </Link>
-          
-          <Link
-            to="/notes"
-            className="flex items-center space-x-2 px-6 py-3 text-gray-700 hover:bg-primary hover:text-accent"
-          >
-            <BookOpen className="w-5 h-5" />
-            <span>My Notes</span>
-          </Link>
-          
-          <Link
-            to="/settings"
-            className="flex items-center space-x-2 px-6 py-3 text-gray-700 hover:bg-primary hover:text-accent"
-          >
-            <Settings className="w-5 h-5" />
-            <span>Settings</span>
-          </Link>
-        </nav>
+    <div className="w-20 bg-white border-r border-gray-200 flex flex-col items-center py-6 gap-6">
+      <motion.button
+        whileHover={{ scale: 1.1 }}
+        whileTap={{ scale: 0.95 }}
+        onClick={handleAddNote}
+        className="w-12 h-12 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 flex items-center justify-center shadow-lg hover:shadow-xl transition-shadow"
+      >
+        <Plus className="text-white h-6 w-6" />
+      </motion.button>
+
+      <div className="flex flex-col gap-3">
+        {colorOptions.map((color) => (
+          <motion.div
+            key={color}
+            whileHover={{ scale: 1.2 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={() => setSelectedColor(color)}
+            className={`w-8 h-8 rounded-full cursor-pointer ${color} ${
+              selectedColor === color
+                ? "ring-2 ring-offset-2 ring-blue-500"
+                : ""
+            }`}
+          />
+        ))}
       </div>
-    </aside>
+    </div>
   );
-}
+};

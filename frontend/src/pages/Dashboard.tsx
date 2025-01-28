@@ -4,7 +4,7 @@ import Footer from "../components/Footer";
 import DisplayModal from "../components/Modal";
 import Navbar from "../components/Navbar";
 import NoteCard from "../components/NoteCard";
-import Sidebar from "../components/Sidebar";
+// import Sidebar from "../components/Sidebar";
 import { authAtom, modalAtom, notesAtom } from "../store/atoms/atoms";
 
 import { notesSelector } from "../store/selectors/notesSelector";
@@ -12,6 +12,8 @@ import { INotes } from "../store/types/types";
 import { useEffect } from "react";
 import { useNoteFunctions } from "../store/hooks/noteHooks";
 import ShareModal from "../components/ShareModal";
+import { Sidebar } from "../components/Sidebar";
+import CardsContainer from "../components-new/CardContainer";
 
 // export default function Dashboard() {
 //   const loadedNotes = useRecoilValueLoadable(notesSelector);
@@ -100,7 +102,7 @@ export default function Dashboard() {
     <div className="min-h-screen bg-primary flex">
       <Sidebar />
 
-      <div className="flex-1 flex flex-col">
+      {/* <div className="flex-1 flex flex-col">
         <Navbar isAuthenticated={isAuthenticated} onAddNote={handleAddNote} />
 
         <main className="flex-1 p-6 overflow-auto">
@@ -124,7 +126,8 @@ export default function Dashboard() {
         </main>
 
         <Footer />
-      </div>
+      </div> */}
+      <CardsContainer/>
       <DisplayModal />
       <ShareModal />
      

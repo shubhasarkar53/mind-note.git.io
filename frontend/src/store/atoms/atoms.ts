@@ -1,5 +1,5 @@
 import { atom } from "recoil";
-import { INotes, IUser } from "../types/types";
+import { INotes, IUser, Note } from "../types/types";
 
 export const loadingAtom = atom<boolean>({
     key:"loadingAtom",
@@ -48,3 +48,11 @@ export const sharableLinkAtom = atom<string|null>({
     key:"sharableLinkAtom",
     default:null
 })
+
+
+//new 
+
+export const notesState = atom<Note[]>({
+    key: 'notesState',
+    default: []
+  });

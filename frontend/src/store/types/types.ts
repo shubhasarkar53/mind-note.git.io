@@ -2,6 +2,7 @@ export interface INotes {
   _id?: string;
   link?: string;
   type?: string;
+  color?: string;
   title?: string;
   text?: string;
   shared?: boolean;
@@ -25,4 +26,11 @@ export interface IUser {
   username: string;
   password: string;
   isPremium?: boolean;
+}
+
+export interface Note {
+  id: string;
+  content: string;
+  color: string;
+  createdAt: Date;
 }
