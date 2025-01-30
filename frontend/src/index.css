@@ -16,7 +16,7 @@ body {
 }
 
 .btn-primary {
-  @apply bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors;
+  @apply bg-gradient-to-r from-blue-500 to-purple-500 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors;
 }
 .btn-secondary {
   @apply bg-white text-blue-600 px-6 py-2 rounded-3xl border border-blue-600 hover:bg-blue-50 transition-colors;

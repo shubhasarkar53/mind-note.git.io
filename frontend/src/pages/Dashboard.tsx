@@ -14,6 +14,7 @@ import { useNoteFunctions } from "../store/hooks/noteHooks";
 import ShareModal from "../components/ShareModal";
 import { Sidebar } from "../components/Sidebar";
 import CardsContainer from "../components-new/CardContainer";
+import { TopBar } from "../components-new/Navbar2";
 
 // export default function Dashboard() {
 //   const loadedNotes = useRecoilValueLoadable(notesSelector);
@@ -99,41 +100,15 @@ export default function Dashboard() {
     handleGetNotes();
   }, []);
   return (
-    <div className="min-h-screen bg-primary flex">
-      <Sidebar />
+    <div>
+      <TopBar />
+      <div className="min-h-screen bg-primary flex">
+        <Sidebar />
 
-      {/* <div className="flex-1 flex flex-col">
-        <Navbar isAuthenticated={isAuthenticated} onAddNote={handleAddNote} />
-
-        <main className="flex-1 p-6 overflow-auto">
-          {notes.length === 0 ? (
-            <div className="h-full flex items-center justify-center">
-              <button
-                onClick={handleAddNote}
-                className="btn-primary flex items-center space-x-2"
-              >
-                <Plus className="w-5 h-5" />
-                <span>Add Mind Note</span>
-              </button>
-            </div>
-          ) : (
-            <div className="grid grid-cols-1  md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {notes.map((note) => (
-                <NoteCard key={note._id} note={note} onEdit={() => {}} />
-              ))}
-            </div>
-          )}
-        </main>
-
-        <Footer />
-      </div> */}
-
-
-      
-      <CardsContainer/>
-      <DisplayModal />
-      <ShareModal />
-     
+        <CardsContainer />
+        <DisplayModal />
+        <ShareModal />
+      </div>
     </div>
   );
 }
