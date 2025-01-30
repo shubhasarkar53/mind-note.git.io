@@ -21,13 +21,14 @@ export const getAllNotesController = catchAsyncErrors(
 );
 export const postNewNoteController = catchAsyncErrors(
   async (req: Request, res: Response, next: NextFunction) => {
-    const { link, type, title, text } = req.body;
+    const { link, type, title, text , color} = req.body;
 
     const newNote = new Content({
       link,
       type,
       title,
       text,
+      color,
       // tags,
       userId: req.userId,
     });

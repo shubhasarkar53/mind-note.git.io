@@ -7,7 +7,7 @@ export default function CardsContainer() {
     const [notes, setNotes] = useRecoilState(notesAtom);
    
     return (
-      <div className="w-full h-screen bg-red-500">
+      <div className="w-full h-screen ">
 
         <div className="flex-1 flex ">
        

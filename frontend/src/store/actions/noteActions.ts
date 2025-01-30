@@ -9,6 +9,7 @@ export type updateNoteDataType = Pick<
 
 export const createNote = async (notesData: INotes) => {
   //call
+  console.log("coming dta:",notesData)
   return await axios.post(`${baseUrl}/mindnote/new`, notesData, {
     withCredentials: true,
   });

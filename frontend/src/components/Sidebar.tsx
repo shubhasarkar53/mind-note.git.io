@@ -25,8 +25,10 @@ export const Sidebar = () => {
       type: "link",
       text: "Write you mind's note here..",
       createdAt: new Date().toISOString(),
+      color: selectedColor,
     };
 
+    console.log("default:  ",defaultContent)
     await handleCreateNote(defaultContent);
     //   setNotes((prev) => [
     //     ...prev,
