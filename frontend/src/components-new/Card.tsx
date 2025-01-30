@@ -4,6 +4,8 @@ import { motion } from "framer-motion";
 import { INotes, Note } from "../store/types/types";
 import { useNoteFunctions } from "../store/hooks/noteHooks";
 import { updateNoteDataType } from "../store/actions/noteActions";
+import WebsiteLogo from "./WebsiteLogo";
+import { Link } from "react-router-dom";
 
 interface NoteCardProps {
   note: INotes;
@@ -54,12 +56,26 @@ export const NoteCard2: React.FC<NoteCardProps> = ({ note }) => {
       [field]: value,
     };
 
+    //if field == "link"
+    //call the funtion
+    // get res and add to type type:funtion's return value.
+    //link :value
+
+    if (field === "link") {
+      try {
+        const hostname = new URL(value).hostname;
+        debouncedNoteData.current.type = hostname;
+      } catch {
+        debouncedNoteData.current.type = "link";
+      }
+    }
+
     setNoteData(debouncedNoteData.current);
     clock = setTimeout(() => {
       console.log(debouncedNoteData.current);
 
       checkIfEmpty(debouncedNoteData.current);
-    
+
       console.log(debouncedNoteData.current);
       handleUpdateNote(debouncedNoteData.current, note._id as string);
     }, 3000);
@@ -96,22 +112,34 @@ export const NoteCard2: React.FC<NoteCardProps> = ({ note }) => {
         className="w-full bg-transparent border-none focus:outline-none resize-none"
         rows={4}
       />
-      <div className="flex items-center">
+      <div className="flex items-center gap-2">
         <input
           value={noteData.link}
           onChange={(e) => handleContentChange("link", e.target.value)}
           placeholder="Paste the link..."
-          className="w-full bg-transparent border-none focus:outline-none resize-none"
+          className="w-full text-sm text-gray-600 bg-transparent border-none focus:outline-none resize-none"
         />
-        <div className="flex justify-center items-center">
-          <motion.button
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.95 }}
-            className="text-gray-500 hover:text-blue-500 transition-colors"
-          >
-            <Instagram className="h-5 w-5" />
-          </motion.button>
+        <div>
+        {noteData.link && (
+          <div className="flex justify-center items-center">
+            <Link
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={(e) => e.stopPropagation()}
+              to={noteData.link as string}
+            >
+              <motion.button
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.95 }}
+                className="text-gray-500 hover:text-blue-500 transition-colors"
+              >
+                <WebsiteLogo url={noteData.link} />
+              </motion.button>
+            </Link>
+          </div>
+        )}
         </div>
+        
       </div>
     </motion.div>
   );

@@ -1,9 +1,6 @@
-import React from "react";
-import { Plus } from "lucide-react";
 import { motion } from "framer-motion";
-import { nanoid } from "nanoid";
-import { useSetRecoilState } from "recoil";
-import { notesState } from "../store/atoms/atoms";
+import { Plus } from "lucide-react";
+import React from "react";
 import { useNoteFunctions } from "../store/hooks/noteHooks";
 
 const colorOptions = [
@@ -30,15 +27,7 @@ export const Sidebar = () => {
 
     console.log("default:  ",defaultContent)
     await handleCreateNote(defaultContent);
-    //   setNotes((prev) => [
-    //     ...prev,
-    //     {
-    //       id: nanoid(),
-    //       content: '',
-    //       color: selectedColor,
-    //       createdAt: new Date(),
-    //     },
-    //   ]);
+
   };
 
   return (
