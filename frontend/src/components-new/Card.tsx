@@ -1,11 +1,13 @@
 import React, { useRef, useState } from "react";
-import { Instagram, Trash2 } from "lucide-react";
+import { Instagram, Share2, Trash2 } from "lucide-react";
 import { motion } from "framer-motion";
 import { INotes, Note } from "../store/types/types";
 import { useNoteFunctions } from "../store/hooks/noteHooks";
 import { updateNoteDataType } from "../store/actions/noteActions";
 import WebsiteLogo from "./WebsiteLogo";
 import { Link } from "react-router-dom";
+import { useRecoilState } from "recoil";
+import { shareModalAtom } from "../store/atoms/atoms";
 
 interface NoteCardProps {
   note: INotes;
@@ -21,9 +23,10 @@ export const NoteCard2: React.FC<NoteCardProps> = ({ note }) => {
     link: note.link,
     type: note.type,
   });
+    const [isModalOpen, setIsModalOpen] = useRecoilState(shareModalAtom);
 
   const debouncedNoteData = useRef(noteData);
-  const { handleDeleteNote, handleUpdateNote } = useNoteFunctions();
+  const { handleDeleteNote, handleUpdateNote , handleGenerateSharableLink} = useNoteFunctions();
 
   const onDelete = () => {
     handleDeleteNote(note._id as string);
@@ -81,6 +84,14 @@ export const NoteCard2: React.FC<NoteCardProps> = ({ note }) => {
     }, 3000);
   };
 
+  async function handleShare() {
+    console.log("noteid from share:", note._id);
+    handleGenerateSharableLink(note._id as string);
+    //open share modal
+    setIsModalOpen(true);
+  }
+
+
   return (
     <motion.div
       layout
@@ -89,7 +100,7 @@ export const NoteCard2: React.FC<NoteCardProps> = ({ note }) => {
       exit={{ opacity: 0, y: -20 }}
       className={`${note.color} p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow`}
     >
-      <div className="flex justify-end mb-2">
+      <div className="flex justify-end mb-2 gap-2">
         <motion.button
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.95 }}
@@ -97,6 +108,14 @@ export const NoteCard2: React.FC<NoteCardProps> = ({ note }) => {
           className="text-gray-500 hover:text-red-500 transition-colors"
         >
           <Trash2 className="h-5 w-5" />
+        </motion.button>
+        <motion.button
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.95 }}
+          onClick={handleShare}
+          className="text-gray-500 hover:text-blue-400 transition-colors"
+        >
+          <Share2 className="w-5 aspect-square " />
         </motion.button>
       </div>
       <input
@@ -120,26 +139,25 @@ export const NoteCard2: React.FC<NoteCardProps> = ({ note }) => {
           className="w-full text-sm text-gray-600 bg-transparent border-none focus:outline-none resize-none"
         />
         <div>
-        {noteData.link && (
-          <div className="flex justify-center items-center">
-            <Link
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={(e) => e.stopPropagation()}
-              to={noteData.link as string}
-            >
-              <motion.button
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.95 }}
-                className="text-gray-500 hover:text-blue-500 transition-colors"
+          {noteData.link && (
+            <div className="flex justify-center items-center">
+              <Link
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={(e) => e.stopPropagation()}
+                to={noteData.link as string}
               >
-                <WebsiteLogo url={noteData.link} />
-              </motion.button>
-            </Link>
-          </div>
-        )}
+                <motion.button
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="text-gray-500 hover:text-blue-500 transition-colors"
+                >
+                  <WebsiteLogo url={noteData.link} />
+                </motion.button>
+              </Link>
+            </div>
+          )}
         </div>
-        
       </div>
     </motion.div>
   );

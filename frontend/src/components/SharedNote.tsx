@@ -24,7 +24,7 @@ function SharedNote() {
   console.log(sharedNote);
   
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-blue-100 p-6">
+    <div className={`min-h-screen bg-gradient-to-br from-blue-50 to-blue-100 p-6`}>
       <div className="max-w-4xl mx-auto bg-white rounded-2xl shadow-lg overflow-hidden transition-all duration-300 hover:shadow-xl">
         {/* Header with user info */}
         <div className="bg-gradient-to-r from-blue-600 to-blue-400 p-4 flex items-center justify-between">

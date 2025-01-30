@@ -41,7 +41,7 @@ const handleCopy = (sharableLink: string) => {
               </div>
             </div>
 
-            {copied && <div className="text-sm text-blue-600">Link copied!</div>}
+            {copied && <div className="text-sm text-blue-500">Link copied!</div>}
           </div> :<div>Generating Link...</div>
           }
         </Box>
