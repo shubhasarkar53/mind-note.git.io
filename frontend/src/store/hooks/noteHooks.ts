@@ -15,6 +15,7 @@ import {
   deleteNote,
   generateSharableLink,
   getNotes,
+  getSearchedNotes,
   getSharedNote,
   updateNote,
   updateNoteDataType,
@@ -138,6 +139,32 @@ export const useNoteFunctions = () => {
     }
   };
 
+  //handle searched results
+  const handleSearchNotes = async (query:string) =>{
+    setLoading(true);
+    setError(null);
+    try {
+      const { data } = await getSearchedNotes(query);
+      console.log("Saerched Notes data:", data);
+      if (data.searchResults) {
+        setNotes(data.searchResults);
+        return true;
+      }
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        setError(error?.response?.data?.message);
+        // console.log(error);
+        throw error;
+      } else {
+        console.error("Failed to load search results");
+      }
+      return false;
+    } finally {
+      setLoading(false);
+    }
+  }
+
+
   const handleGenerateSharableLink = async (id: string) => {
     setLoading(true);
     setError(null);
@@ -200,6 +227,7 @@ export const useNoteFunctions = () => {
     handleGetNotes,
     handleDeleteNote,
     handleGetSharedContent,
-    handleGenerateSharableLink
+    handleGenerateSharableLink,
+    handleSearchNotes
   };
 };

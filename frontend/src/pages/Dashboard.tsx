@@ -1,20 +1,19 @@
-import { Plus } from "lucide-react";
-import { useRecoilState, useRecoilValue, useRecoilValueLoadable } from "recoil";
-import Footer from "../components/Footer";
+import { useRecoilState, useRecoilValue } from "recoil";
 import DisplayModal from "../components/Modal";
-import Navbar from "../components/Navbar";
-import NoteCard from "../components/NoteCard";
 // import Sidebar from "../components/Sidebar";
-import { authAtom, modalAtom, notesAtom } from "../store/atoms/atoms";
+import {
+  authAtom,
+  loadingAtom,
+  modalAtom,
+  notesAtom,
+} from "../store/atoms/atoms";
 
-import { notesSelector } from "../store/selectors/notesSelector";
-import { INotes } from "../store/types/types";
 import { useEffect } from "react";
-import { useNoteFunctions } from "../store/hooks/noteHooks";
-import ShareModal from "../components/ShareModal";
-import { Sidebar } from "../components/Sidebar";
 import CardsContainer from "../components-new/CardContainer";
 import { TopBar } from "../components-new/Navbar2";
+import ShareModal from "../components/ShareModal";
+import { Sidebar } from "../components/Sidebar";
+import { useNoteFunctions } from "../store/hooks/noteHooks";
 
 // export default function Dashboard() {
 //   const loadedNotes = useRecoilValueLoadable(notesSelector);
@@ -89,6 +88,9 @@ import { TopBar } from "../components-new/Navbar2";
 export default function Dashboard() {
   const notes = useRecoilValue(notesAtom);
   const isAuthenticated = useRecoilValue(authAtom);
+
+  const loading = useRecoilValue(loadingAtom);
+
   const [, setIsModalOpen] = useRecoilState(modalAtom);
   const handleAddNote = () => {
     // setSelectedNote(null);
@@ -101,14 +103,16 @@ export default function Dashboard() {
   }, []);
   return (
     <div>
-      <TopBar />
-      <div className="min-h-screen bg-primary flex">
-        <Sidebar />
+      <>
+        <TopBar />
+        <div className="min-h-screen bg-primary flex">
+          <Sidebar />
 
-        <CardsContainer />
-        <DisplayModal />
-        <ShareModal />
-      </div>
+          <CardsContainer />
+          <DisplayModal />
+          <ShareModal />
+        </div>
+      </>
     </div>
   );
 }

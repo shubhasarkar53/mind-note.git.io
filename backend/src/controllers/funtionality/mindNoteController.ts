@@ -19,9 +19,40 @@ export const getAllNotesController = catchAsyncErrors(
     });
   }
 );
+
+export const getSearchedNoteController = catchAsyncErrors(
+  async (req: Request, res: Response, next: NextFunction) => {
+    //get the query from the user
+    const searchQuery = (req.query.q as string).trim();
+    //check if not given
+    if (!searchQuery) {
+      const searchResults = await Content.find().populate("userId");
+      res.status(200).json({
+        success: true,
+        searchResults,
+      });
+    }
+
+    //perfom regex/$or
+    //search using that in the db
+    const searchResults = await Content.find({
+      $or: [
+        { title: { $regex: searchQuery, $options: "i" } },
+        { text: { $regex: searchQuery, $options: "i" } },
+      ],
+    }).populate("userId");
+
+    //return the res
+    res.status(200).json({
+      success: true,
+      searchResults,
+    });
+  }
+);
+
 export const postNewNoteController = catchAsyncErrors(
   async (req: Request, res: Response, next: NextFunction) => {
-    const { link, type, title, text , color} = req.body;
+    const { link, type, title, text, color } = req.body;
 
     const newNote = new Content({
       link,
@@ -38,7 +69,7 @@ export const postNewNoteController = catchAsyncErrors(
     res.status(200).json({
       success: true,
       message: "Note Added",
-      note:newNote
+      note: newNote,
     });
   }
 );
@@ -109,6 +140,7 @@ export const deleteNoteController = catchAsyncErrors(
     });
   }
 );
+
 export const shareMindNoteController = catchAsyncErrors(
   async (req: Request, res: Response, next: NextFunction) => {
     const noteId = req.params.id.toString();
@@ -179,13 +211,15 @@ export const getSharedMindNoteController = catchAsyncErrors(
     }
 
     //check if hash exists
-    const isHashExists = await Link.findOne({ hash: hash});
+    const isHashExists = await Link.findOne({ hash: hash });
     if (!isHashExists) {
-      return next(new ErrorHandler("Invalid sharable link or it is not public", 404));
+      return next(
+        new ErrorHandler("Invalid sharable link or it is not public", 404)
+      );
     }
 
     const linkContent = await Content.findById(isHashExists.noteId).populate({
-      path: "userId", 
+      path: "userId",
       select: "fullname",
     });
 

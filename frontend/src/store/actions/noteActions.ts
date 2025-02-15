@@ -28,6 +28,10 @@ export const getNotes = async () => {
   return await axios.get(`${baseUrl}/mindnotes`, { withCredentials: true });
 };
 
+export const getSearchedNotes = async (query:string) => {
+  return await axios.get(`${baseUrl}/mindnotes/search?q=${query}`, { withCredentials: true });
+};
+
 //share 
 export const generateSharableLink = async (id: string) => {
   return await axios.get(`${baseUrl}/mindnote/share/${id}`, {

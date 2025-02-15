@@ -1,39 +1,53 @@
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  useNavigate,
-} from "react-router-dom";
-import SignUp from "./pages/SignUp";
-import SignIn from "./pages/SignIn";
-import Dashboard from "./pages/Dashboard";
 import { ThemeProvider } from "@mui/material/styles";
-import { theme } from "./theme";
 import { useEffect } from "react";
+import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
+import Dashboard from "./pages/Dashboard";
+import SignIn from "./pages/SignIn";
+import SignUp from "./pages/SignUp";
+import { theme } from "./theme";
 
-import {Navigate} from "react-router-dom"
+import { Navigate } from "react-router-dom";
 
-import { ProtectedRoute } from "./routes/protectedRoute";
-import { useAuth } from "./store/hooks/authHooks";
 import { useRecoilValue } from "recoil";
-import { authAtom } from "./store/atoms/atoms";
 import SharedNote from "./components/SharedNote";
+import { ProtectedRoute } from "./routes/protectedRoute";
+import { authAtom } from "./store/atoms/atoms";
+import { useAuth } from "./store/hooks/authHooks";
 
 function App() {
   const { loadUser } = useAuth();
-const isAuthenticated = useRecoilValue(authAtom)
-
+  const isAuthenticated = useRecoilValue(authAtom);
   useEffect(() => {
     loadUser();
   }, []);
+
+  // const loading = useRecoilValue(appLoadingAtom);
+
+  // useEffect(() => {
+  //   loadUser();
+  // }, []);
+
+  // if (loading) {
+  //   return <Loader />;
+  // }
 
   return (
     <ThemeProvider theme={theme}>
       <Router>
         <Routes>
-          <Route path="/signup" element={!isAuthenticated ? <SignUp /> : <Navigate to={"/dashboard"}/>} />
-          <Route path="/signin" element={ !isAuthenticated ?  <SignIn /> :<Navigate to={"/dashboard"}/>} />
-          <Route path="/mindnote/share/:hash" element={ <SharedNote/>} />
+          <Route
+            path="/signup"
+            element={
+              !isAuthenticated ? <SignUp /> : <Navigate to="/dashboard" />
+            }
+          />
+          <Route
+            path="/signin"
+            element={
+              !isAuthenticated ? <SignIn /> : <Navigate to="/dashboard" />
+            }
+          />
+          <Route path="/mindnote/share/:hash" element={<SharedNote />} />
           <Route
             path="/dashboard"
             element={

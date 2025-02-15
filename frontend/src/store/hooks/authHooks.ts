@@ -1,5 +1,5 @@
 import { useRecoilState } from "recoil";
-import { authAtom, errorAtom, loadingAtom, userAtom } from "../atoms/atoms";
+import { appLoadingAtom, authAtom, errorAtom, loadingAtom, userAtom } from "../atoms/atoms";
 import {
   fetchCurrentUser,
   ICredentials,
@@ -12,6 +12,7 @@ import axios from "axios";
 
 export const useAuth = () => {
   const [loading, setLoading] = useRecoilState(loadingAtom);
+  const [appLoading, setAppLoading] = useRecoilState(appLoadingAtom);
   const [error, setError] = useRecoilState(errorAtom);
   const [user, setUser] = useRecoilState(userAtom);
   const [isAuthenticated, setIsAuthenticated] = useRecoilState(authAtom);
@@ -96,6 +97,7 @@ export const useAuth = () => {
 
   //loadUser
 
+
   const loadUser = async () => {
     setLoading(true);
     setError(null);
@@ -121,6 +123,35 @@ export const useAuth = () => {
       setLoading(false);
     }
   };
+
+// ---------------- DOnt delete this comment -- try to fix the flash of signin page
+
+  // const loadUser = async () => {
+  //   setAppLoading(true);
+  //   setError(null);
+  //   try {
+  //     const { data } = await fetchCurrentUser();
+  //     console.log("Current user details:", data);
+  //     if (data) {
+  //       setUser(data.user);
+  //       setIsAuthenticated(true);
+  //       return true;
+  //     }
+  //   } catch (error) {
+  //     if (axios.isAxiosError(error)) {
+  //       setError(error?.response?.data?.message);
+  //       setIsAuthenticated(false);
+  //       // console.log(error);
+  //       throw error;
+  //     } else {
+  //       console.error("Failed to load user");
+  //     }
+  //     return false;
+  //   } finally {
+  //     setAppLoading(false);
+  //   }
+  // };
+// ----------------
 
   return { handleSignup, handleSignin, handleLogout, loadUser };
 };

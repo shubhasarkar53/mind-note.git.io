@@ -1,10 +1,12 @@
 import { Router } from "express";
 import { isAuthenticated } from "../middlewares/isAuthenticated";
-import { deleteNoteController, getAllNotesController, getSharedMindNoteController, patchNoteController, postNewNoteController, shareMindNoteController } from "../controllers/funtionality/mindNoteController";
+import { deleteNoteController, getAllNotesController, getSearchedNoteController, getSharedMindNoteController, patchNoteController, postNewNoteController, shareMindNoteController } from "../controllers/funtionality/mindNoteController";
 
 const router = Router();
 
 router.get('/mindnotes', isAuthenticated , getAllNotesController)
+
+router.get('/mindnotes/search', isAuthenticated , getSearchedNoteController)
 
 router.post('/mindnote/new',isAuthenticated,postNewNoteController)
 
