@@ -98,7 +98,7 @@ export const NoteCard2: React.FC<NoteCardProps> = ({ note }) => {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -20 }}
-      className={`${note.color} p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow`}
+      className={`cursor-pointer ${note.color} p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow`}
     >
       <div className="flex justify-end mb-2 gap-2">
         <motion.button

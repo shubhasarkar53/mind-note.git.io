@@ -14,6 +14,7 @@ import { TopBar } from "../components-new/Navbar2";
 import ShareModal from "../components/ShareModal";
 import { Sidebar } from "../components/Sidebar";
 import { useNoteFunctions } from "../store/hooks/noteHooks";
+import { useNavigate } from "react-router-dom";
 
 // export default function Dashboard() {
 //   const loadedNotes = useRecoilValueLoadable(notesSelector);
@@ -86,8 +87,16 @@ import { useNoteFunctions } from "../store/hooks/noteHooks";
 // }
 
 export default function Dashboard() {
-  const notes = useRecoilValue(notesAtom);
   const isAuthenticated = useRecoilValue(authAtom);
+  const navigateTo = useNavigate();
+  useEffect(() => {
+    if (!isAuthenticated) {
+      navigateTo("/signin");
+      // return null;
+    }
+  }, []);
+
+  const notes = useRecoilValue(notesAtom);
 
   const loading = useRecoilValue(loadingAtom);
 
@@ -105,9 +114,8 @@ export default function Dashboard() {
     <div>
       <>
         <TopBar />
-        <div className="min-h-screen bg-primary flex">
+        <div className="min-h-screen  flex">
           <Sidebar />
-
           <CardsContainer />
           <DisplayModal />
           <ShareModal />

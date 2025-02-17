@@ -1,9 +1,10 @@
+import { Calendar, Link as LinkIcon, User } from "lucide-react";
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { useNoteFunctions } from "../store/hooks/noteHooks";
 import { useRecoilValue } from "recoil";
-import { errorAtom, sharedNoteAtom, shareErrorAtom } from "../store/atoms/atoms";
-import { User, Link as LinkIcon, Calendar } from "lucide-react";
+import { sharedNoteAtom, shareErrorAtom } from "../store/atoms/atoms";
+import { useNoteFunctions } from "../store/hooks/noteHooks";
+import MainLogo from "../components-new/MainLogo";
 function SharedNote() {
   const { hash } = useParams();
   const error = useRecoilValue(shareErrorAtom);
@@ -22,16 +23,19 @@ function SharedNote() {
   if (!sharedNote) return null;
 
   console.log(sharedNote);
-  
+
   return (
-    <div className={`min-h-screen bg-gradient-to-br from-blue-50 to-blue-100 p-6`}>
+    <div className={`min-h-screen p-6`}>
       <div className="max-w-4xl mx-auto bg-white rounded-2xl shadow-lg overflow-hidden transition-all duration-300 hover:shadow-xl">
         {/* Header with user info */}
-        <div className="bg-gradient-to-r from-blue-500 to-purple-500 p-4 flex items-center justify-between">
-            <h1 className=" space-x-2 text-white font-semibold text-2xl">MindNotes</h1>
+        <div className=" p-4 flex items-center justify-between border-b border-gray-200">
+          <MainLogo></MainLogo>
+
           <div className="flex justify-end items-center space-x-2 text-white">
-            <User className="w-5 h-5" />
-            <span className="text-sm font-medium">Shared by {sharedNote.userId?.fullname}</span>
+            <User className="w-5 h-5 text-sm text-gray-600 hover:text-purple-600 transition-colors font-medium" />
+            <span className="text-sm text-gray-600 hover:text-purple-600 transition-colors font-medium">
+              Shared by {sharedNote.userId?.fullname}
+            </span>
           </div>
         </div>
 
@@ -58,12 +62,13 @@ function SharedNote() {
             <div className="flex items-center space-x-2 group">
               <Calendar className="w-4 h-4 group-hover:text-blue-500 transition-colors duration-300" />
               <span className="group-hover:text-blue-500 transition-colors duration-300">
-                {sharedNote.updatedAt && new Date(sharedNote.updatedAt).toLocaleDateString("en-IN", {
-                  year: "numeric",
-                  month: "long",
-                  day: "numeric",
-                  timeZone: "Asia/Kolkata", 
-                })}
+                {sharedNote.updatedAt &&
+                  new Date(sharedNote.updatedAt).toLocaleDateString("en-IN", {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                    timeZone: "Asia/Kolkata",
+                  })}
               </span>
             </div>
           </div>

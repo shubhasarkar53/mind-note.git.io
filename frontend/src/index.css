@@ -11,8 +11,20 @@
   --color-accent: 37 99 235;
 }
 
+html {
+  font-family: 'Inter', system-ui, sans-serif;
+}
+
 body {
-  @apply bg-primary text-gray-800;
+  @apply bg-gradient-to-br from-purple-50 to-blue-50 min-h-screen;
+}
+
+.hero-gradient {
+  background: linear-gradient(
+    125deg,
+    rgba(139, 92, 246, 0.1) 0%,
+    rgba(59, 130, 246, 0.1) 100%
+  );
 }
 
 .btn-primary {
@@ -32,3 +44,7 @@ body {
 .input-field {
   @apply w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none;
 }
+.gradient-text {
+  @apply bg-clip-text text-transparent bg-gradient-to-r from-purple-600 to-blue-600;
+}
+

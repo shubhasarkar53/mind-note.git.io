@@ -25,7 +25,7 @@ export const TopBar = () => {
       {!isAuthenticated ? (
         <Navigate to={"/signin"} />
       ) : (
-        <div className="h-16 bg-white border-b border-gray-200 flex items-center justify-between px-6">
+        <div className="py-4 bg-white border-b border-gray-200 flex items-center justify-between px-6">
           <MainLogo/>
           <SearchNotes />
           {isAuthenticated && (

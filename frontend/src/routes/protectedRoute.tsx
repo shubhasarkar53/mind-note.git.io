@@ -20,7 +20,7 @@ export const ProtectedRoute:React.FC<Props> = ({ children } ) =>{
    
     if (!isAuthenticated) {
       navigateTo("/signin")
-      return null;
+      // return null;
     }
 
     return <>{children}</>;

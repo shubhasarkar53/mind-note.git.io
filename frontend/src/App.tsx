@@ -13,6 +13,8 @@ import SharedNote from "./components/SharedNote";
 import { ProtectedRoute } from "./routes/protectedRoute";
 import { authAtom } from "./store/atoms/atoms";
 import { useAuth } from "./store/hooks/authHooks";
+import Landing from "./pages/Landing";
+import NotFound from "./components-new/Fallback";
 
 function App() {
   const { loadUser } = useAuth();
@@ -35,6 +37,7 @@ function App() {
     <ThemeProvider theme={theme}>
       <Router>
         <Routes>
+          <Route path="/" element={<Landing />} />
           <Route
             path="/signup"
             element={
@@ -56,7 +59,9 @@ function App() {
               </ProtectedRoute>
             }
           />
+          <Route path="*" element={<NotFound />} />
         </Routes>
+        
       </Router>
     </ThemeProvider>
   );
