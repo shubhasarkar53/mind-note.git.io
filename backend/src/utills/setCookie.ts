@@ -8,6 +8,9 @@ export const setCookie = (res: Response, token: string) => {
     ), //from hours to milisec
     httpOnly: true,
     withCredientials: true,
+    sameSite:process.env.NODE_ENV==="development"?"lax":"none",
+    secure:process.env.NODE_ENV==="development"?false:true,
   };
+  //@ts-ignore
   res.cookie("SessionID", token, options);
 };
