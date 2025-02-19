@@ -6,6 +6,7 @@ import { useAuth } from "../store/hooks/authHooks";
 import { ICredentials } from "../store/actions/authActions";
 import { useRecoilValue } from "recoil";
 import { errorAtom, loadingAtom } from "../store/atoms/atoms";
+import MainLogo from "../components-new/MainLogo";
 export default function SignUp() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -29,7 +30,7 @@ export default function SignUp() {
     <div className="min-h-screen flex items-center justify-center ">
       <div className="max-w-md w-full space-y-8 p-8 bg-white rounded-xl shadow-lg">
         <div className="text-center">
-          <Brain className="mx-auto h-12 w-12 text-accent" />
+          <MainLogo/>
           <h2 className="mt-6 text-3xl font-bold text-gray-900">
             Create your account
           </h2>
