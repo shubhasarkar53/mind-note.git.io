@@ -21,8 +21,8 @@ app.use(
   cors({
     origin: process.env.FRONTED_URL as string || "http://localhost:5173",
     credentials: true,
-    methods: "GET,POST,PUT,DELETE,PATCH", // Specify allowed HTTP methods
-    allowedHeaders: "Content-Type,Authorization",
+    // methods: "GET,POST,PUT,DELETE,PATCH", // Specify allowed HTTP methods
+    // allowedHeaders: "Content-Type,Authorization",
   })
 );
 
@@ -37,6 +37,8 @@ connectDb()
     console.log("Connected to the database");
     app.listen(port, () => {
       console.log("Server is listning on port:" + port);
+      console.log("FE" + process.env.FRONTED_URL + "type :" +typeof(process.env.FRONTED_URL) );
+      
     });
   })
   .catch((error) => {
