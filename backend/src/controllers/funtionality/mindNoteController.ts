@@ -10,7 +10,11 @@ export const getAllNotesController = catchAsyncErrors(
     //hit db
     //get all notes from content
 
-    const allNotes = await Content.find();
+    // get user from req
+    const user = req.userId;
+  
+
+    const allNotes = await Content.find({userId:user});
 
     res.status(200).json({
       success: true,

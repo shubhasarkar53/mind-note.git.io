@@ -1,10 +1,9 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Brain } from "lucide-react";
 import { useRecoilValue } from "recoil";
+import MainLogo from "../components-new/MainLogo";
 import { authAtom, errorAtom, loadingAtom } from "../store/atoms/atoms";
 import { useAuth } from "../store/hooks/authHooks";
-import MainLogo from "../components-new/MainLogo";
 
 export default function SignIn() {
   const [email, setEmail] = useState("");
