@@ -26,20 +26,22 @@ export const getAllNotesController = catchAsyncErrors(
 
 export const getSearchedNoteController = catchAsyncErrors(
   async (req: Request, res: Response, next: NextFunction) => {
+
+    const user = req.userId;
     //get the query from the user
     const searchQuery = (req.query.q as string).trim();
     //check if not given
     if (!searchQuery) {
-      const searchResults = await Content.find().populate("userId");
+      const searchResults = await Content.find({userId:user}).populate("userId");
       res.status(200).json({
         success: true,
         searchResults,
       });
     }
-
     //perfom regex/$or
     //search using that in the db
     const searchResults = await Content.find({
+      userId: user,
       $or: [
         { title: { $regex: searchQuery, $options: "i" } },
         { text: { $regex: searchQuery, $options: "i" } },
