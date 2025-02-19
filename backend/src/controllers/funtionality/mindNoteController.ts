@@ -12,9 +12,8 @@ export const getAllNotesController = catchAsyncErrors(
 
     // get user from req
     const user = req.userId;
-  
 
-    const allNotes = await Content.find({userId:user});
+    const allNotes = await Content.find({ userId: user });
 
     res.status(200).json({
       success: true,
@@ -26,13 +25,14 @@ export const getAllNotesController = catchAsyncErrors(
 
 export const getSearchedNoteController = catchAsyncErrors(
   async (req: Request, res: Response, next: NextFunction) => {
-
     const user = req.userId;
     //get the query from the user
     const searchQuery = (req.query.q as string).trim();
     //check if not given
     if (!searchQuery) {
-      const searchResults = await Content.find({userId:user}).populate("userId");
+      const searchResults = await Content.find({ userId: user }).populate(
+        "userId"
+      );
       res.status(200).json({
         success: true,
         searchResults,
@@ -98,6 +98,10 @@ export const patchNoteController = catchAsyncErrors(
 
     if (!note) {
       return next(new ErrorHandler("Note not found", 404));
+    }
+    //check if the id is of loggedin user's
+    if (note.userId.toString() !== req.userId?.toString()) {
+      return next(new ErrorHandler("This resource can't be accessed.", 401));
     }
 
     const updates: Partial<typeof note> = {};
